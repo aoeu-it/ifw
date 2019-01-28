@@ -4,8 +4,6 @@ iptables -I IN_INFRA -m state --state ESTABLISHED -j ACCEPT
 iptables -N OUT_INFRA
 iptables -I OUTPUT -j OUT_INFRA
 iptables -I OUT_INFRA -m state --state ESTABLISHED -j ACCEPT
-iptables -I OUT_INFRA -p udp -s 1.2.3.5 -d 1.2.3.6 --dport 53 --sport 1025:65535 -m comment --comment "iptables-exporter: access to 53/udp on dns-01.example.com" -j ACCEPT
-iptables -I IN_INFRA -p tcp -d 1.2.3.5 --dport 80 --sport 1025:65535 -m comment --comment "iptables-exporter: allow virtual-public on 80/tcp" -j ACCEPT
-iptables -I IN_INFRA -p tcp -d 1.2.3.5 --dport 443 --sport 1025:65535 -m comment --comment "iptables-exporter: allow virtual-public on 443/tcp" -j ACCEPT
-iptables -I IN_INFRA -p tcp -s 1.2.3.4 -d 1.2.3.5 --dport 80 --sport 1025:65535 -m comment --comment "iptables-exporter: allow laptop-01.example.com on 80/tcp" -j ACCEPT
-iptables -I IN_INFRA -p tcp -s 1.2.3.4 -d 1.2.3.5 --dport 443 --sport 1025:65535 -m comment --comment "iptables-exporter: allow laptop-01.example.com on 443/tcp" -j ACCEPT
+iptables -I OUT_INFRA -p udp -s 1.2.3.6 -d 1.2.3.7 --dport 53 --sport 1025:65535 -m comment --comment "iptables-exporter: access to 53/udp on dns-01.example.com" -j ACCEPT
+iptables -I IN_INFRA -p tcp -d 1.2.3.6 --dport 80 --sport 1025:65535 -m comment --comment "iptables-exporter: allow virtual-public on 80/tcp" -j ACCEPT
+iptables -I IN_INFRA -p tcp -d 1.2.3.6 --dport 443 --sport 1025:65535 -m comment --comment "iptables-exporter: allow virtual-public on 443/tcp" -j ACCEPT

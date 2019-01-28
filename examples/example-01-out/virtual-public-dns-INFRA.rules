@@ -4,4 +4,4 @@ iptables -I IN_INFRA -m state --state ESTABLISHED -j ACCEPT
 iptables -N OUT_INFRA
 iptables -I OUTPUT -j OUT_INFRA
 iptables -I OUT_INFRA -m state --state ESTABLISHED -j ACCEPT
-iptables -I IN_INFRA -p udp -s 1.2.3.6 -d 1.1.1.1 --dport 53 --sport 1025:65535 -m comment --comment "iptables-exporter: allow dns-01.example.com on 53/udp" -j ACCEPT
+iptables -I IN_INFRA -p udp -s 1.2.3.7 -d 1.1.1.1 --dport 53 --sport 1025:65535 -m comment --comment "iptables-exporter: allow dns-01.example.com on 53/udp" -j ACCEPT

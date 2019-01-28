@@ -10,6 +10,9 @@ Some assumption are made about the infrastructure:
 
 IPv4 is still supported and this tool can be used to make migrating to IPv6 easier.
 
+## Usage
+python2.7 to_iptables.py --chain-name=INFRA --output-dir /output/dir --network-yaml network.yaml
+
 ## How to migrate
 Migration is easy:
  1. Populate the YAML file with connections between systems (see network.yaml section).
@@ -41,9 +44,6 @@ Bellow is the schema of the iptables INPUT chain:
 
 The INFRA chain is placed on top of your existing iptables rules and will only accept traffic that matches a rule. The same is done for the iptables OUTPUT chain. The policy of rejecting traffic is not handled by this tool. 
 
-## Usage
-python2.7 to_iptables.py --chain-name=INFRA --output-dir /output/dir --network-yaml network.yaml
-
 ## network.yaml
 See example\_network.yaml for the full examples code described bellow. The example will also include example code for:
  - Expose a webserver (many to one): Used to expose your services to the world. The keyword "world" is used as source in YAML to indicate to ignore the source (INPUT) and destination (OUTPUT) address when generating the firewall rules.
@@ -51,6 +51,9 @@ See example\_network.yaml for the full examples code described bellow. The examp
  - Group of systems (many to one): Can be used for a subnet of devices that you do not manage. A virtual node can be created to represent the subnet.
 
 ### Connecting systems (one to one)
+```bash
+python source/to_iptables.py --chain-name=INFRA --output-dir examples/example-01-out/ --network-yaml examples/example-01.yaml
+```
 
 #### nodes
 ```yaml
