@@ -52,6 +52,10 @@ See example\_network.yaml for the full examples code described bellow. The examp
 
 ### Connecting systems (one to one)
 ```bash
+virtualenv .
+source bin/activate 
+pip install -r requirements.txt
+
 python source/to_iptables.py --chain-name=INFRA --output-dir examples/example-01-out/ --network-yaml examples/example-01.yaml
 ```
 
@@ -123,9 +127,9 @@ network:
 ```
 
 ## Debugging
-To unittest infra.py the following can be executed in the app directory:
+To unittest infra.py the following can be executed:
 ```
-python tests.py 
+make unittest 
 ```
 
 ## Extending to other firewalls
