@@ -1,0 +1,122 @@
+network:
+  nodes:
+    # one-to-one
+    - name: laptop-01.example.com
+      can_access:
+        nodes:
+          - name: admin-web-01.example.com
+            services:
+              - web 
+        groups:
+          - name: infra
+            services:
+              - dns
+          - name: all
+            services:
+              - ssh
+      exposes:
+    # many-to-one: see virtual-public
+    - name: admin-web-01.example.com
+      can_access:
+        nodes:
+        groups:
+          - name: infra
+            services:
+              - dns
+      exposes:
+        - web
+    - name: web-01.example.com
+      can_access:
+        nodes:
+        groups:
+          - name: infra
+            services:
+              - dns
+      exposes:
+        - web
+    # one-to-many
+    - name: dns-01.example.com
+      can_access:
+        nodes:
+          - name: virtual-public-dns
+            services:
+              - dns 
+        groups:
+      exposes:
+        - dns
+    # subnets
+    - name: subnet-abc
+      can_access:
+        nodes:
+        groups:
+          - name: infra
+            services:
+              - dns
+      exposes:
+    # public
+    - name: virtual-public
+      can_access:
+        nodes:
+          - name: web-01.example.com
+            services:
+              - web 
+        groups:
+      exposes:
+        - web
+        - dns
+    - name: virtual-public-dns
+      can_access:
+        nodes:
+        groups:
+      exposes:
+        - dns
+  groups:
+    - name: infra
+      nodes:
+        - dns-01.example.com
+    - name: all
+      nodes:
+        - dns-01.example.com
+        - sftp-01.example.com
+  services:
+    - name: ssh
+      rules:
+        - name: ssh
+          port: 22
+          proto: tcp
+    - name: dns
+      rules:
+        - name: dns
+          port: 53
+          proto: udp
+    - name: web
+      rules:
+        - name: http
+          port: 80
+          proto: tcp
+        - name: https
+          port: 443
+          proto: tcp
+  nodedata:
+    nodes:
+      - name: laptop-01.example.com
+        ipv4:
+          - 1.2.3.4 
+      - name: admin-web-01.example.com
+        ipv4:
+          - 1.2.3.5 
+      - name: web-01.example.com
+        ipv4:
+          - 1.2.3.6 
+      - name: dns-01.example.com
+        ipv4:
+          - 1.2.3.7 
+      - name: subnet-abc
+        ipv4:
+          - 1.2.4.0/24
+      - name: virtual-public
+        ipv4:
+          - world
+      - name: virtual-public-dns
+        ipv4:
+          - 1.1.1.1

@@ -1,0 +1,8 @@
+iptables -N IN_INFRA
+iptables -I INPUT -j IN_INFRA
+iptables -I IN_INFRA -m state --state ESTABLISHED -j ACCEPT
+iptables -N OUT_INFRA
+iptables -I OUTPUT -j OUT_INFRA
+iptables -I OUT_INFRA -m state --state ESTABLISHED -j ACCEPT
+iptables -I OUT_INFRA -p tcp -d 1.2.3.5 --dport 80 --sport 1025:65535 -m comment --comment "iptables-exporter: access to 80/tcp on web-01.example.com" -j ACCEPT
+iptables -I OUT_INFRA -p tcp -d 1.2.3.5 --dport 443 --sport 1025:65535 -m comment --comment "iptables-exporter: access to 443/tcp on web-01.example.com" -j ACCEPT

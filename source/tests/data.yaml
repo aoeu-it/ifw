@@ -1,0 +1,292 @@
+unittests:
+  simple_network:
+    input:
+      network:
+        nodes:
+          - name: host-01.example.com
+            can_access:
+              nodes:
+                - name: host-01.example.com
+                  services:
+                    - app1 
+              groups:
+                - name: group1
+                  services:
+                    - app2
+            exposes:
+              - app1
+          - name: host-02.example.com
+            can_access:
+              nodes:
+                - name: host-04.example.com
+                  services:
+                    - app2
+                - name: host-05.example.com
+                  services:
+                    - app2
+              groups:
+                - name: group2
+                  services:
+                    - app2
+            exposes:
+              - app2
+          - name: host-03.example.com
+            can_access:
+              nodes:
+              groups:
+            exposes:
+              - app2
+          - name: host-04.example.com
+            can_access:
+              nodes:
+              groups:
+            exposes:
+              - app2
+          - name: host-05.example.com
+            can_access:
+              nodes:
+                - name: host-01.example.com
+                  services:
+                    - app1
+              groups:
+            exposes:
+              - app2
+          - name: host-06.example.com
+            can_access:
+              nodes:
+              groups:
+                - name: group2
+                  services:
+                    - app2
+            exposes:
+              - app2
+        groups:
+          - name: group1
+            nodes:
+              - host-02.example.com
+              - host-03.example.com
+          - name: group2
+            nodes:
+              - host-01.example.com
+              - host-06.example.com
+        services:
+          - name: app1  
+            rules:
+              - name: rule1
+                port: 1
+                proto: tcp
+          - name: app2
+            rules:
+              - name: rule2
+                port: 2
+                proto: tcp
+              - name: rule3
+                port: 3
+                proto: tcp
+        nodedata:
+          nodes:
+            - name: host-01.example.com
+              ipv4:
+                - 8.7.6.5
+              ipv6:
+                - 2001:db8::1
+            - name: host-02.example.com
+              ipv4:
+                - 7.6.5.5
+              ipv6:
+                - 2001:db8::2
+            - name: host-03.example.com
+              ipv6:
+                - 2001:db8::3
+            - name: host-04.example.com
+              ipv6:
+                - 2001:db8::4
+            - name: host-05.example.com
+              ipv6:
+                - 2001:db8::5
+            - name: host-06.example.com
+              ipv6:
+                - 2001:db8::6
+    output_01:
+      - name: host-01.example.com
+        can_access:
+          nodes:
+            - name: host-01.example.com
+              services:
+                - app1
+          groups:
+            - name: group1
+              services:
+                - app2
+        exposes:
+          - app1
+    output_02:
+      - name: host-01.example.com
+        ipv4:
+          - 8.7.6.5
+        ipv6:
+          - 2001:db8::1
+    output_03:
+      - name: host-02.example.com
+        can_access:
+          nodes:
+            - name: host-04.example.com
+              services:
+                - app2
+            - name: host-05.example.com
+              services:
+                - app2
+          groups:
+            - name: group2
+              services:
+                - app2
+        exposes:
+          - app2
+      - name: host-03.example.com
+        can_access:
+          nodes:
+          groups:
+        exposes:
+          - app2
+    output_04:
+      - name: host-01.example.com
+        services:
+          - app1 
+      - name: host-02.example.com
+        services:
+          - app2 
+      - name: host-03.example.com
+        services:
+          - app2 
+    output_05:
+      - name: host-01.example.com
+        can_access:
+          nodes:
+            - name: host-01.example.com
+              services:
+                - app1 
+          groups:
+            - name: group1
+              services:
+                - app2
+        exposes:
+          - app1
+      - name: host-02.example.com
+        can_access:
+          nodes:
+            - name: host-04.example.com
+              services:
+                - app2
+            - name: host-05.example.com
+              services:
+                - app2
+          groups:
+            - name: group2
+              services:
+                - app2
+        exposes:
+          - app2
+      - name: host-03.example.com
+        can_access:
+          nodes:
+          groups:
+        exposes:
+          - app2
+    output_06:
+      - name: host-01.example.com
+        can_access:
+          nodes:
+            - name: host-01.example.com
+              services:
+                - app1
+          groups:
+            - name: group1
+              services:
+                - app2
+        exposes:
+          - app1
+      - name: host-02.example.com
+        can_access:
+          nodes:
+            - name: host-04.example.com
+              services:
+               - app2
+            - name: host-05.example.com
+              services:
+                - app2
+          groups:
+            - name: group2
+              services:
+                - app2
+        exposes:
+          - app2
+      - name: host-05.example.com
+        can_access:
+          nodes:
+            - name: host-01.example.com
+              services:
+                - app1
+          groups:
+        exposes:
+          - app2
+      - name: host-06.example.com
+        can_access:
+          nodes:
+          groups:
+            - name: group2
+              services:
+                - app2
+        exposes:
+          - app2
+    output_07:
+        - description: allow host-01.example.com on 1/tcp
+          destination: 2001:db8::1
+          dport: 1025:65535
+          proto: tcp
+          port: 1
+          name: rule1
+          source: 2001:db8::1
+        - description: allow host-05.example.com on 1/tcp
+          destination: 2001:db8::1
+          dport: 1025:65535
+          proto: tcp
+          port: 1
+          name: rule1
+          source: 2001:db8::5
+    output_08:
+        - description: access to 1/tcp on host-01.example.com
+          destination: 2001:db8::1
+          name: rule1
+          port: 1
+          proto: tcp
+          sport: 1025:65535
+          source: 2001:db8::1
+        - description: access to 2/tcp on host-02.example.com
+          destination: 2001:db8::2
+          sport: 1025:65535
+          name: rule2
+          port: 2
+          proto: tcp
+          sport: 1025:65535
+          source: 2001:db8::1
+        - description: access to 3/tcp on host-02.example.com
+          destination: 2001:db8::2
+          name: rule3
+          port: 3
+          proto: tcp
+          sport: 1025:65535
+          source: 2001:db8::1
+        - description: access to 2/tcp on host-03.example.com
+          destination: 2001:db8::3
+          name: rule2
+          port: 2
+          proto: tcp
+          sport: 1025:65535
+          source: 2001:db8::1
+        - description: access to 3/tcp on host-03.example.com
+          destination: 2001:db8::3
+          name: rule3
+          port: 3
+          proto: tcp
+          sport: 1025:65535
+          source: 2001:db8::1
